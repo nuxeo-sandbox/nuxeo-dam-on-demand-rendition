@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.labs.dam.rendition.ondemand.commandline">
+    <extension target="org.nuxeo.ecm.platform.commandline.executor.service.CommandLineExecutorComponent"
+                point="command">
+    <command name="ffmpeg-tomp4-ondemand" enabled="true">
+        <commandLine>ffmpeg</commandLine>
+        <parameterString>-i #{sourceFilePath} -s #{width}x#{height} -pix_fmt yuv420p -acodec aac -strict -2 -vcodec libx264 -f mp4 #{targetFilePath}</parameterString>
+        <winParameterString>-i #{sourceFilePath} -s #{width}x#{height} -pix_fmt yuv420p -acodec aac -strict -2 -vcodec libx264 -f mp4 #{targetFilePath}</winParameterString>
+        <installationDirective>You need to install ffmpeg from http://ffmpeg.org (apt-get install ffmpeg)
+        </installationDirective>
+    </command>
+    </extension>
+</component>

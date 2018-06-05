@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static org.nuxeo.labs.dam.rendition.ondemand.worker.OnDemandVideoRenditionWorker.ONDEMAND_VIDEO_CONVERSION;
+
 @RunWith(FeaturesRunner.class)
 @Features(AutomationFeature.class)
 @RepositoryConfig(init = DefaultRepositoryInit.class, cleanup = Granularity.METHOD)
@@ -65,12 +67,16 @@ public class TestVideoOnDemandRendition {
         OperationContext ctx = new OperationContext(session);
         ctx.setInput(video);
         Map<String, Object> params = new HashMap<>();
-        params.put("properties", new Properties());
+        Properties properties = new Properties();
+        properties.put("format","ondemandConvertToMP4");
+        properties.put("width","320");
+        properties.put("height","240");
+        params.put("properties", properties);
         AsyncBlob blob = (AsyncBlob) automationService.run(ctx, VideoOnDemandRendition.ID, params);
 
         Assert.assertNotNull(blob);
 
-        workManager.awaitCompletion(60,TimeUnit.SECONDS);
+        workManager.awaitCompletion(ONDEMAND_VIDEO_CONVERSION,60,TimeUnit.SECONDS);
 
         TransientStore store = TransientStoreHelper.getTransientStore();
 

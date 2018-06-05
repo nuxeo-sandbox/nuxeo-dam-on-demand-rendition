@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<component name="org.nuxeo.labs.dam.rendition.ondemand.converters">
+    <extension target="org.nuxeo.ecm.core.convert.service.ConversionServiceImpl" point="converter">
+        <converter name="ondemandConvertToMP4" class="org.nuxeo.ecm.platform.convert.plugins.CommandLineConverter">
+            <destinationMimeType>video/mp4</destinationMimeType>
+            <parameters>
+                <parameter name="CommandLineName">ffmpeg-tomp4-ondemand</parameter>
+                <parameter name="videoMimeType">video/mp4</parameter>
+                <parameter name="videoExtension">mp4</parameter>
+                <parameter name="tmpDirectoryPrefix">convertToMP4</parameter>
+            </parameters>
+        </converter>
+    </extension>
+</component>
