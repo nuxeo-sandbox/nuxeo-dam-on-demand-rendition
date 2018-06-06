@@ -58,6 +58,5 @@ public class TestVideoWorker {
                 video,"aaa",session.getPrincipal().getName(),properties);
 
         worker.work();
-
     }
 }
