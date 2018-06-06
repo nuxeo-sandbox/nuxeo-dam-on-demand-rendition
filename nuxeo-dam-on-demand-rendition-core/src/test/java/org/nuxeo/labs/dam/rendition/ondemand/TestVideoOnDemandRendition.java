@@ -76,6 +76,7 @@ public class TestVideoOnDemandRendition {
 
         Assert.assertNotNull(blob);
 
+        Assert.assertEquals(1,workManager.listWork(ONDEMAND_VIDEO_CONVERSION,null).size());
         workManager.awaitCompletion(ONDEMAND_VIDEO_CONVERSION,60,TimeUnit.SECONDS);
 
         TransientStore store = TransientStoreHelper.getTransientStore();
