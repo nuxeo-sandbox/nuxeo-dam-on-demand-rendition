@@ -48,7 +48,7 @@ public class VideoOnDemandRendition {
     @OperationMethod
     public Blob run(DocumentModel doc) {
         // build the key
-        String key = TransientStoreHelper.buildTransientStoreKey(doc);
+        String key = TransientStoreHelper.buildTransientStoreKey(doc, properties);
 
         TransientStore ts = TransientStoreHelper.getTransientStore();
         if (ts == null) {
