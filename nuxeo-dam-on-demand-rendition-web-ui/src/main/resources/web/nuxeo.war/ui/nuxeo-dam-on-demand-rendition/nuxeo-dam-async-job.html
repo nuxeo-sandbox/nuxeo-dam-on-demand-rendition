@@ -6,16 +6,16 @@
         height: 100%;
       }
     </style>
-    
+
     <nuxeo-connection id="nx"></nuxeo-connection>
-    
+
     <nuxeo-document auto doc-id="[[docId]]" response="{{doc}}"></nuxeo-document>
-    
+
     <div>[[doc.title]]</div>
     <div>Conversion to [[params.format]] [[params.width]]x[[params.height]]</div>
-    
+
     <template is="dom-if" if="[[done]]">
-			<a href="[[_computeDownloadUrl(key)]]">Download</a>
+      <a href="[[_computeDownloadUrl(key)]]">Download</a>
     </template>
     <template is="dom-if" if="[[!done]]">
       <div>in Progress</div>
@@ -24,40 +24,43 @@
   </template>
 
   <script>
-    Polymer({
-      is: 'nuxeo-dam-async-job',
-      behaviors: [Nuxeo.RoutingBehavior, Nuxeo.I18nBehavior],
-      properties: {
-        key: {
-          type: String,
-          observer: '_watchDownload'
-        },
-        docId:String,
-        params:Object,
-        done: Boolean
-      },
-      
-      
-      _watchDownload: function(key) {
-        if (!key) {
-          return;
-        }
-        var context = this;
-        this.$.nx.http(this.$.nx.url + "/nxblobstatus/" + key).then(function(res) {
-          if (res.completed) {
-            context.done = true;
-          } else {
-            context.done = false;
-            window.setTimeout(context._watchDownload.bind(context), 5000, key);
+      Polymer({
+          is: 'nuxeo-dam-async-job',
+          behaviors: [Nuxeo.RoutingBehavior, Nuxeo.I18nBehavior],
+          properties: {
+              key: {
+                  type: String,
+                  observer: '_watchDownload'
+              },
+              docId:String,
+              params:Object,
+              done: Boolean
+          },
+
+
+          _watchDownload: function(key) {
+              if (!key) {
+                  return;
+              }
+              var context = this;
+              this.$.nx.http(this.$.nx.url + "/nxblobstatus/" + key).then(function(res) {
+                  if (res.completed) {
+                      context.done = true;
+                  } else {
+                      context.done = false;
+                      window.setTimeout(context._watchDownload.bind(context), 5000, key);
+                  }
+              }).catch(function(err) {
+                  console.log('error fetching key '+key);
+                  context.fire('remove-key',key);
+              });
+          },
+
+          _computeDownloadUrl: function(key) {
+              return this.$.nx.url + "/nxbigblob/" + key;
           }
-        })
-      },
-      
-      _computeDownloadUrl: function(key) {
-        return this.$.nx.url + "/nxbigblob/" + key;
-      }
-      
-    });
+
+      });
   </script>
 </dom-module>
 
