@@ -1,0 +1,10 @@
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Manifest-Version: 1.0
+Bundle-Vendor: org.nuxeo.labs.dam.rendition.ondemand
+Bundle-Version: 1.0.0
+Bundle-Name: nuxeo-dam-on-demand-rendition-web-ui
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: nuxeo-dam-on-demand-rendition-web-ui;singleton=true
+Nuxeo-Component: OSGI-INF/webresources-contrib.xml
+

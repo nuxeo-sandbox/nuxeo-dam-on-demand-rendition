@@ -1,0 +1,44 @@
+<link rel="import" href="nuxeo-dam-async-job.html">
+
+
+<dom-module id="nuxeo-dam-async-drawer">
+  <template>
+    <style include="nuxeo-styles">
+      :host {
+        display: block;
+        height: 100%;
+      }
+
+      .list-item {
+        height:92px;
+        border-bottom: 1px solid var(--nuxeo-border);
+        padding-left: 4px;
+      }
+    </style>
+    
+    <iron-localstorage id="storage" name="ondemand" value="{{jobs}}"></iron-localstorage>
+    
+    <div class="header">Jobs</div>
+    
+    <template is="dom-repeat" items="[[jobs]]">
+      <nuxeo-dam-async-job class="list-item" key="[[item.key]]" doc-id="[[item.uid]]" params="[[item]]"></nuxeo-dam-async-job>
+    </template>
+    
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'nuxeo-dam-async-drawer',
+      behaviors: [Nuxeo.RoutingBehavior, Nuxeo.I18nBehavior],
+      properties: {},
+      
+      ready:function() {
+        setInterval(() => {
+          this.$.storage.reload();
+        },1000)
+      }
+ 
+    });
+  </script>
+</dom-module>

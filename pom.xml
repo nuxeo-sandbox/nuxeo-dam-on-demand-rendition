@@ -17,6 +17,7 @@
   <modules>
     <module>nuxeo-dam-on-demand-rendition-core</module>
     <module>nuxeo-dam-on-demand-rendition-package</module>
+    <module>nuxeo-dam-on-demand-rendition-web-ui</module>
   </modules>
 
   <properties>
@@ -81,6 +82,11 @@
       <dependency>
         <groupId>org.nuxeo.labs.dam.rendition.ondemand</groupId>
         <artifactId>nuxeo-dam-on-demand-rendition-package</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.nuxeo.labs.dam.rendition.ondemand</groupId>
+        <artifactId>nuxeo-dam-on-demand-rendition-web-ui</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

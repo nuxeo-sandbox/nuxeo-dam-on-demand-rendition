@@ -1,0 +1,42 @@
+<!--
+@license
+(C) Copyright Nuxeo Corp. (http://nuxeo.com/)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="nuxeo-dam-video-ondemand-rendition-action.html">
+<link rel="import" href="nuxeo-dam-async-drawer.html">
+
+<nuxeo-slot-content name="onDemandVideoRendition" slot="DOCUMENT_ACTIONS" order="80" disabled>
+    <template>
+      <nuxeo-filter document="[[document]]" type="Video">
+        <template>
+          <nuxeo-dam-video-ondemand-rendition-action document="[[document]]"></nuxeo-dam-video-ondemand-rendition-action>
+        </template>
+      </nuxeo-filter>
+    </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="jobs" slot="DRAWER_ITEMS" order="95">
+  <template>
+    <nuxeo-menu-icon label="My Jobs" name="jobs" icon="icons:schedule"></nuxeo-menu-icon>
+  </template>
+</nuxeo-slot-content>
+
+<nuxeo-slot-content name="jobs" slot="DRAWER_PAGES">
+  <template>
+    <nuxeo-dam-async-drawer name="jobs" label="My Jobs"></nuxeo-dam-async-drawer>
+  </template>
+</nuxeo-slot-content>
+

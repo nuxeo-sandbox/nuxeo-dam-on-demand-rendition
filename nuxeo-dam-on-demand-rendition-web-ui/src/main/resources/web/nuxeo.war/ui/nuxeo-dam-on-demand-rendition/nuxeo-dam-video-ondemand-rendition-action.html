@@ -1,0 +1,160 @@
+<dom-module id="nuxeo-dam-video-ondemand-rendition-action">
+  <template>
+    <style include="nuxeo-styles iron-flex iron-flex-alignment">
+      nuxeo-dialog {
+        text-align:left;
+        min-width:400px;
+      }
+      
+      nuxeo-input, nuxeo-directory-suggestion {
+        margin-left: 12px;
+        width: 100%;
+      }
+      
+    </style>
+
+    <nuxeo-operation id="videoOnDemandRenditionOp" op="VideoOnDemandRendition" input="[[document.uid]]" on-response="_handleResponse"></nuxeo-operation>
+
+    <iron-localstorage id="storage" name="ondemand" value="{{jobs}}"></iron-localstorage>
+    
+    <paper-icon-button on-tap="_togglePopup" icon="image:photo-size-select-large"></paper-icon-button>
+    <paper-tooltip>[[i18n('video.onDemandRendition.tooltip')]]</paper-tooltip>
+
+    <nuxeo-dialog
+              reparent
+              id="onDemandRenditionDialog"
+              with-backdrop
+              no-auto-focus>
+
+        <h2>[[i18n('video.onDemandRendition.label.title')]]</h2>
+
+      
+      <iron-form id="form">
+        <form>
+
+          <div class="layout horizontal">
+
+            <nuxeo-input  type="number"
+                         min="0"
+                         max="3840"
+                         value="{{width}}"
+                         label="Width"
+                         required="true"></nuxeo-input>
+
+            <nuxeo-input  type="number"
+                         max="2160"
+                         min="0"
+                         label="Height"
+                         value="{{height}}"
+                         required="true"></nuxeo-input>
+          </div>
+
+          <nuxeo-directory-suggestion
+                                      role="widget"
+                                      id="dirSuggFormat"
+                                      label="[[i18n('video.onDemandRendition.label.format')]]"
+                                      directory-name="VideoTransformation_Format"
+                                      name="format"
+                                      value="{{format}}"
+                                      placeholder=""
+                                      min-chars="0"
+                                      required="true">
+          </nuxeo-directory-suggestion>
+
+        </form>
+      </iron-form>
+
+
+      <div class="buttons">
+        <paper-button id="cancelButton" dialog-dismiss>[[i18n('popupPermission.cancel')]]</paper-button>
+        <paper-button id="doOnDemandRenditionButton" class="primary" on-tap="_doOnDemandRendition">Start</paper-button>
+      </div>
+      
+    </nuxeo-dialog>
+
+    <paper-toast id="toast"></paper-toast>
+    
+  </template>
+
+  <script>
+    Polymer({
+      is: 'nuxeo-dam-video-ondemand-rendition-action',
+      behaviors: [Nuxeo.I18nBehavior,Nuxeo.FiltersBehavior,Nuxeo.RoutingBehavior],
+      properties: {
+        document: {
+          type: Object,
+          observer: '_updateDefault'
+        },
+
+        height: {
+          type: Number,
+          value: 0,
+        },
+
+        width: {
+          type: Number,
+          value: 0,
+        },
+
+        format: {
+          type: String,
+          value: null
+        }
+      },
+
+      
+      _updateDefault: function(document) {
+        if (!document) {
+          return;
+        }
+        var info = document.properties['vid:info'];
+        if (!info) {
+          return;
+        } else {
+          this.height = info.height;
+          this.width = info.width;
+          this.format = 'mp4';
+        }
+      },
+      
+      _togglePopup: function () {
+        this.$.onDemandRenditionDialog.toggle();
+      },
+
+      _doOnDemandRendition: function() {
+        if (!this.$.form.validate()) {
+          return;
+        }
+        
+        this.params = {
+          properties: {
+            width: this.width,
+            height: this.height,
+            format: "ondemandConvertToMP4"
+          }
+        }
+        this.$.videoOnDemandRenditionOp.params = this.params;
+        this.$.videoOnDemandRenditionOp.execute();
+        this._togglePopup();
+      },
+      
+      _toast: function(text) {
+        this.$.toast.hide();
+        this.$.toast.text = text;
+        this.$.toast.open();
+      },
+      
+      _handleResponse: function(e) {
+        this._toast('Processing Request');
+        this.params.properties.uid = this.document.uid;
+        this.params.properties.key = e.detail.response.key
+        if (!this.jobs) {
+          this.jobs = [];
+        }
+        this.push('jobs',this.params.properties);
+      }
+      
+    });
+  </script>
+</dom-module>
+
